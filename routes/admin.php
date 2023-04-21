@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Admin\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Admin\Auth\EmailVerificationNotificationController;
