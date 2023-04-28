@@ -41,7 +41,7 @@ class OwnersController extends Controller
 
         // dd($eloquent_all, $querybuilder_get, $querybuilder_first, $collection_test);
 
-        $owners = Owner::select('id', 'name', 'email', 'created_at')->get(); //eroquent使用
+        $owners = Owner::select('id', 'name', 'email', 'created_at')->paginate(3); //eroquent使用
 
         return view('admin.owners.index',
         compact('owners'));
