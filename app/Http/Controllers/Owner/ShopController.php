@@ -9,9 +9,25 @@ use Illuminate\Support\Facades\Auth;
 
 class ShopController extends Controller
 {
-    public function __constuct()
+    public function __construct()
     {
         $this->middleware('auth:owners');
+
+        $this->middleware(function ($request, $next) {
+            // dd($request->route()->parameter('shop')); //URLのshopキーの値を取得する ※文字列型
+            //dd(Auth::id()); //※数字
+
+            $id = $request->route()->parameter('shop');
+            if(!is_null($id)){ //indexURLのときはnullなので、その判定を行う
+                $shopsOwnerId = Shop::findOrFail($id)->owner->id; //login ownerのidを取得
+                $shopId =(int)$shopsOwnerId; //キャスト 文字列を数字に変換
+                $ownerId = Auth::id();
+                if($shopId !== $ownerId){ //一致していなければ404画面を表示
+                    abort(404);
+                }
+            }
+            return $next($request);
+        });
     }
 
     public function index()
@@ -24,7 +40,9 @@ class ShopController extends Controller
     }
 
     public function edit(string $id)
-    {}
+    {
+        dd(Shop::findOrFail($id));
+    }
 
     public function update(Request $request, string $id)
     {}
