@@ -60,7 +60,7 @@ class ShopController extends Controller
         ]);
 
         $imageFile = $request->image;
-        if(!is_null($imageFile) && $imageFile->isValid()){
+        if(!is_null($imageFile) && $imageFile->isValid()){ //$imageFile->isValid()でuploadできているか確認を行う
             $fileNameToStore = ImageService::upload($imageFile,'shops');
         }
 
