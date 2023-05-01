@@ -23,6 +23,8 @@ class UploadImageRequest extends FormRequest
     {
         return [
             'image' => 'image|mimes:jpg,jpeg,png|max:2048',
+            'files.*.image' => 'required|image|mimes:jpg,jpeg,png|max:2048', 
+            // 'files.*.image'の書き方で配列のバリデーションが可能
         ];
     }
 
