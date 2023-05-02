@@ -14,4 +14,4 @@ storageフォルダにリンク後、
 
 storage/app/public/products フォルダ内に
 保存すると表示されます。
-(productdフォルダがない場合は作成してください。)
+(productsフォルダがない場合は作成してください。)
