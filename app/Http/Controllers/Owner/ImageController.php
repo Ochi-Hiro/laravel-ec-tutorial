@@ -87,9 +87,6 @@ class ImageController extends Controller
         'status' => 'info']);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         $image = Image::findOrFail($id);
