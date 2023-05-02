@@ -20,7 +20,7 @@ class ImageController extends Controller
             $id = $request->route()->parameter('image');
             if(!is_null($id)){
                 $imagesOwnerId = Image::findOrFail($id)->owner->id;
-                $iamgeId =(int)$iamgesOwnerId;
+                $imageId =(int)$imagesOwnerId;
                 if($imageId !== Auth::id()){
                     abort(404);
                 }
@@ -39,17 +39,11 @@ class ImageController extends Controller
         compact('images'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('owner.images.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(UploadImageRequest $request)
     {
         $imageFiles = $request->file('files'); // $request->file('files')で複数の画像を取得することができる
@@ -69,28 +63,27 @@ class ImageController extends Controller
         'status' => 'info']);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        //
+        $image = Image::findOrFail($id);
+        return view('owner.images.edit', compact('image'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'title' => ['string', 'max:50'],
+        ]);
+
+        $image = Image::findOrFail($id);
+        $image->title = $request->title;
+
+        $image->save();
+
+        return redirect()
+        ->route('owner.images.index')
+        ->with(['message' => '画像情報を更新しました。',
+        'status' => 'info']);
     }
 
     /**
