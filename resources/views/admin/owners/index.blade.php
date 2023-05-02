@@ -50,18 +50,6 @@
                             </div>
                         </div>
                     </section>
-
-                    {{-- eroquent
-                    @foreach($eloquent_all as $eloquent_owner)
-                        {{ $eloquent_owner->name }}
-                        {{ $eloquent_owner->created_at->diffForHumans() }}
-                    @endforeach
-                    <br>
-                    querybuilder
-                    @foreach($querybuilder_get as $querybuilder_owner)
-                        {{ $querybuilder_owner->name }}
-                        {{ Carbon\Carbon::parse($querybuilder_owner->created_at)->diffForHumans() }}
-                    @endforeach --}}
                 </div>
             </div>
         </div>

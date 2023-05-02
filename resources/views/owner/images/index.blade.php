@@ -15,13 +15,14 @@
                     </div>
                     <div class="flex flex-wrap">
                         @foreach($images as $image)
-                            <div class="w-1/4 p-4">
+                            <div class="w-1/4 p-2 md:p-4"> 
+                                <!-- レスポンシブ対応(md:~) -->
                                 <a href="{{ route('owner.images.edit', ['image' => $image->id]) }}">
-                                    <div class="border rouded-md p-4">
-                                        <div class="text-xl">
+                                    <div class="border rouded-md p-2 md:p-4">
+                                        <x-thumbnail :filename="$image->filename" type="products" />
+                                        <div class="text-gray-700">
                                             {{ $image->title }}
                                         </div>
-                                        <x-thumbnail :filename="$image->filename" type="products" />
                                     </div>
                                 </a>
                             </div>

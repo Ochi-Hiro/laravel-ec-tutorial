@@ -8,6 +8,7 @@ use App\Models\Image;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UploadImageRequest;
 use App\Services\ImageService;
+use Illuminate\Support\Facades\Storage;
 
 
 class ImageController extends Controller
@@ -20,7 +21,7 @@ class ImageController extends Controller
             $id = $request->route()->parameter('image');
             if(!is_null($id)){
                 $imagesOwnerId = Image::findOrFail($id)->owner->id;
-                $iamgeId =(int)$iamgesOwnerId;
+                $imageId =(int)$imagesOwnerId;
                 if($imageId !== Auth::id()){
                     abort(404);
                 }
@@ -39,17 +40,11 @@ class ImageController extends Controller
         compact('images'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('owner.images.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(UploadImageRequest $request)
     {
         $imageFiles = $request->file('files'); // $request->file('files')で複数の画像を取得することができる
@@ -69,35 +64,43 @@ class ImageController extends Controller
         'status' => 'info']);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        //
+        $image = Image::findOrFail($id);
+        return view('owner.images.edit', compact('image'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'title' => ['string', 'max:50'],
+        ]);
+
+        $image = Image::findOrFail($id);
+        $image->title = $request->title;
+
+        $image->save();
+
+        return redirect()
+        ->route('owner.images.index')
+        ->with(['message' => '画像情報を更新しました。',
+        'status' => 'info']);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        //
+        $image = Image::findOrFail($id);
+        $filePath = 'public/products/' . $image->filename;
+
+        if(Storage::exists($filePath)){ //ファイルがあるか判定
+            Storage::delete([$filePath]); //ファイルのデリート
+        }
+
+        Image::findOrFail($id)->delete();
+
+        return redirect()
+        ->route('owner.images.index')
+        ->with(['message' => '画像を削除しました。', 
+        'status' => 'alert']);
     }
 }
