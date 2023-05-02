@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('owner_id')
             ->constrained()
             ->onUpdate('cascade')
-            ->onDelete('cascade');
+            ->onDelete('cascade'); //親テーブルの行を削除または更新したとき、子テーブル内の一致する行を自動的に削除または更新する。
             $table->string('name');
             $table->text('information');
             $table->string('filename');
