@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Shop;
 use App\Models\SecondaryCategory;
 use App\Models\Image;
+use App\Models\Stock;
 
 class Product extends Model
 {
@@ -27,5 +28,10 @@ class Product extends Model
     {
         return $this->belongsTo(Image::class, 'image1', 'id'); 
         //(~_id)だとidカラムと判別してくれるが、違う場合は第３引数で指定する
+    }
+
+    public function stock()
+    {
+        return $this->hasMany(Stock::class);
     }
 }

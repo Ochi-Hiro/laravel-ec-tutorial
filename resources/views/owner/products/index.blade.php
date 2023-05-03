@@ -18,7 +18,6 @@
                             @foreach ($owner->shop->product as $product) 
                                 {{-- productの中身を一つずつ表示するためにforeachの中にforeach --}}
                                 <div class="w-1/4 p-2 md:p-4"> 
-                                    <!-- レスポンシブ対応(md:~) -->
                                     <a href="{{ route('owner.products.edit', ['product' => $product->id]) }}">
                                         <div class="border rouded-md p-2 md:p-4">
                                             <x-thumbnail :filename="$product->imageFirst->filename" type="products" />
