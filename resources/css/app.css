@@ -1,3 +1,6 @@
+@import 'micromodal';
+/* 1行目に書かないとNG */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

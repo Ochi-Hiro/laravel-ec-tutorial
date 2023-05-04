@@ -33,13 +33,8 @@ class ProductController extends Controller
 
     public function index()
     {
-        // $products = Owner::findOrFail(Auth::id())->shop->product; //productの件数分SQLが発行される。NGな書き方
-        
         $ownerInfo = Owner::with('shop.product.imageFirst') //EagerLoading リレーションをドットでつなぐ
         ->where('id', Auth::id())->get();
-
-        // dd($ownerInfo);
-
         return view('owner.products.index',
         compact('ownerInfo'));
     }
@@ -67,7 +62,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request);
     }
 
     /**
