@@ -44,6 +44,21 @@ class Product extends Model
         //(~_id)だとidカラムと判別してくれるが、違う場合は第３引数で指定する
     }
 
+    public function imageSecond()
+    {
+        return $this->belongsTo(Image::class, 'image2', 'id'); 
+    }
+
+    public function imageThird()
+    {
+        return $this->belongsTo(Image::class, 'image3', 'id'); 
+    }
+
+    public function imageFourth()
+    {
+        return $this->belongsTo(Image::class, 'image4', 'id'); 
+    }
+
     public function stock()
     {
         return $this->hasMany(Stock::class);
