@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Owner;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Image;
+use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UploadImageRequest;
 use App\Services\ImageService;
@@ -91,6 +92,33 @@ class ImageController extends Controller
     {
         $image = Image::findOrFail($id);
         $filePath = 'public/products/' . $image->filename;
+
+        $imageInProducts = Product::where('image1', $image->id)
+        ->orWhere('image2', $image->id)
+        ->orWhere('image3', $image->id)
+        ->orWhere('image4', $image->id)
+        ->get();
+
+        if($imageInProducts){ //imageの削除時、image1~4の画像をproductで使っているかを確認して、使っていたらproduct側をnullにする。
+            $imageInProducts->each(function($product) use($image){ //$imageInProductsはコレクション型。eachでコレクション内の要素一つ一つに処理ができる。
+                if($product->image1 === $image->id){
+                    $product->image1 = null;
+                    $product->save();
+                }
+                if($product->image2 === $image->id){
+                    $product->image2 = null;
+                    $product->save();
+                }
+                if($product->image3 === $image->id){
+                    $product->image3 = null;
+                    $product->save();
+                }
+                if($product->image4 === $image->id){
+                    $product->image4 = null;
+                    $product->save();
+                }
+            });
+        }
 
         if(Storage::exists($filePath)){ //ファイルがあるか判定
             Storage::delete([$filePath]); //ファイルのデリート
