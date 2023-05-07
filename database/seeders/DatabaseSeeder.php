@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Product;
+use App\Models\Stock;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,8 +23,12 @@ class DatabaseSeeder extends Seeder
            ImageSeeder::class,
            CategorySeeder::class,
         //    ProductSeeder::class,
-        //    StockSeeder::class
+        //    StockSeeder::class,
+            UserSeeder::class
         ]);
+
+        Product::factory(100)->create();  //this->callの後でないとエラー
+        Stock::factory(100)->create();
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
