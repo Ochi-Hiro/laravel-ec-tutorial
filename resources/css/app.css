@@ -1,5 +1,6 @@
 @import 'micromodal';
 /* 1行目に書かないとNG */
+@import 'swiper';
 
 @tailwind base;
 @tailwind components;
