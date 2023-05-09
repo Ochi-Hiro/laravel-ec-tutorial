@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ComponentTestController;
 use App\Http\Controllers\LifeCycleTestController;
 use App\Http\Controllers\User\ItemController;
+use App\Http\Controllers\User\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,10 @@ Route::middleware('auth:users')->group(function(){
     Route::get('/', [ItemController::class, 'index'])->name('items.index');
     Route::get('show/{item}',[ItemController::class,'show'])->name('items.show');
 });
+
+Route::prefix('cart')->middleware('auth:users')->group(function(){
+    Route::post('add', [CartController::class, 'add'])->name('cart.add');
+}); //データベースに保存する為post通信
 
 // Route::get('/dashboard', function () {
 //     return view('user.dashboard');
