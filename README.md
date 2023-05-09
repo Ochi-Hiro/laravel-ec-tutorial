@@ -15,4 +15,7 @@ storageフォルダにリンク後、
 storage/app/public/products フォルダ内に
 保存すると表示されます。
 (productsフォルダがない場合は作成してください。)
-test
+
+ショップの画像も表示する場合は、
+storage/app/public/shopフォルダを作成し
+画像を保存してください。
