@@ -55,19 +55,19 @@
                         </div>
                         <div class="md:w-1/2 ml-4">
                             <h2 class="mb-4 text-sm title-font text-gray-500 tracking-widest">{{ $product->category->name }}</h2>
-                            <h1 class="mb-4 text-gray-900 text-3xl title-font font-medium">{{ $product->name }}</h1>
+                            <h1 class="mb-4 text-gray-500 text-3xl title-font font-medium">{{ $product->name }}</h1>
                             <p class="mb-4 leading-relaxed">{{ $product->information }}</p>
                             <div class="flex justify-around items-center">
                                 <div>
-                                    <span class="title-font font-medium text-2xl text-gray-900">{{ number_format($product->price) }}</span>
-                                    <span class="text-sm text-gray-700">円(税込)</span>
+                                    <span class="title-font font-medium text-2xl">{{ number_format($product->price) }}</span>
+                                    <span class="text-sm">円(税込)</span>
                                 </div>
                                 <form method="post" action="{{ route('user.cart.add') }}">
                                     @csrf
                                     <div class="flex items-center">
                                         <span class="mr-3">数量</span>
                                         <div class="relative">
-                                            <select name="quantity" class="rounded border appearance-none border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 text-base pl-3 pr-10">
+                                            <select name="quantity" class="rounded border appearance-none border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 text-gray-900 pl-3 pr-10">
                                                 @for ($i = 1; $i <= $quantity; $i++)
                                                 <option value="{{ $i }}">{{ $i }}</option>
                                                 @endfor

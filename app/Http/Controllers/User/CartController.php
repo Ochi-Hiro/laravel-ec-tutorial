@@ -46,4 +46,13 @@ class CartController extends Controller
         return redirect()->route('user.cart.index');
         //カートに商品を入れたらカート画面に移動する
     }
+
+    public function delete($id)
+    {
+        Cart::where('product_id', $id)
+        ->where('user_id', Auth::id())
+        ->delete();
+
+        return redirect()->route('user.cart.index');
+    }
 }
