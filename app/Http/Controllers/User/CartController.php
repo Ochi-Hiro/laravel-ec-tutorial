@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\User;
+use App\Models\Stock;
 use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
@@ -63,22 +64,39 @@ class CartController extends Controller
 
         $lineItems = [];
         foreach($products as $product){
-            $lineItem = [
-                "price_data" =>[ //Stripeに渡すパラメータの設定
-                    "unit_amount" => $product->price, //金額
-                    "currency" => "JPY", //通過、日本円
-                    "product_data"=> [
-                        "name" =>$product->name, //商品名
-                        "description" => $product->information,
-                    ],
-                ],
-                "quantity" => $product->pivot->quantity, //数量
-            ];
+            $quantity = '';
+            $quantity =Stock::where('product_id', $product->id)->sum('quantity');
 
-            array_push($lineItems, $lineItem); //lineItemをlineItems配列に追加する。array_pushはPHP関数
+            if($product->pivot->quantity > $quantity){
+                return redirect()->route('user.cart.index'); //cart内の商品がStockテーブルより多かったらindexへ戻す
+            } else {
+                $lineItem = [
+                    "price_data" =>[ //Stripeに渡すパラメータの設定
+                        "unit_amount" => $product->price, //金額
+                        "currency" => "JPY", //通過、日本円
+                        "product_data"=> [
+                            "name" =>$product->name, //商品名
+                            "description" => $product->information,
+                        ],
+                    ],
+                    "quantity" => $product->pivot->quantity, //数量
+                ];
+    
+                array_push($lineItems, $lineItem); //lineItemをlineItems配列に追加する。array_pushはPHP関数
+
+            }
+        }
+        // dd($lineItems);
+
+        foreach($products as $product){
+            Stock::create([
+                'product_id' => $product->id,
+                'type' => \Constant::PRODUCT_LIST['reduce'],
+                'quantity' => $product->pivot->quantity * -1
+            ]);
         }
 
-        // dd($lineItems);
+        dd('test');
 
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY')); //envファイルからシークレットキーを設定
 
