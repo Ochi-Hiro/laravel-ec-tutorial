@@ -8,6 +8,7 @@ use App\Models\Cart;
 use App\Models\User;
 use App\Models\Stock;
 use Illuminate\Support\Facades\Auth;
+use Stripe;
 
 class CartController extends Controller
 {
@@ -95,11 +96,9 @@ class CartController extends Controller
                 'quantity' => $product->pivot->quantity * -1
             ]);
         }
+        // dd('test');
 
-        dd('test');
-
-        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY')); //envファイルからシークレットキーを設定
-
+        Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY')); //envファイルからシークレットキーを設定
         $session = \Stripe\Checkout\Session::create([ //StripeSession
             'payment_method_types' => ['card'],
             'line_items' => [$lineItems],
@@ -108,9 +107,6 @@ class CartController extends Controller
             'cancel_url' => route('user.cart.index'),
         ]);
 
-        $publicKey = env('STRIPE_PUBLIC_KEY');
-
-        return view('user.checkout',
-            compact('session', 'publicKey')); //viewへsession情報と公開鍵情報を渡す
+        return redirect($session->url, 303);
     }
 }
