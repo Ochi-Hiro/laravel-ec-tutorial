@@ -30,7 +30,7 @@ class ItemController extends Controller
     {
         $products = Product::availableItems() //商品一覧の取得 scope
         ->sortOrder($request->sort)
-        ->get();
+        ->paginate($request->pagination ?? '20');
         
         return view('user.index', compact('products'));
     }
