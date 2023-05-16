@@ -36,6 +36,7 @@ class ItemController extends Controller
 
         $products = Product::availableItems() //商品一覧の取得 scope
         ->selectCategory($request->category ?? '0')
+        ->searchKeyword($request->keyword)
         ->sortOrder($request->sort)
         ->paginate($request->pagination ?? '20');
         
