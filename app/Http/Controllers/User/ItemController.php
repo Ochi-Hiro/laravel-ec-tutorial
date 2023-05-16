@@ -7,44 +7,41 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Stock;
 use Illuminate\Support\Facades\DB;
+use App\Models\PrimaryCategory;
 
 class ItemController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth:users');
+
+        $this->middleware(function ($request, $next) {
+            $id = $request->route()->parameter('item');
+            if(!is_null($id)){
+                $itemId = Product::availableItems()->where('products.id', $id)->exists(); //existsで入ってきたidがwhereの結果で存在しているか確認して入っていたらtrue返す
+                if(!$itemId){
+                    abort(404);
+                }
+            }
+            return $next($request);
+        });
     }
     
-    public function index()
+    public function index(Request $request)
     {
-        $stocks= DB::table('t_stocks') //クエリビルダ
-        ->select('product_id',
-        DB::raw('sum(quantity) as quantity'))
-        ->groupBy('product_id')
-        ->having('quantity', '>=', 1);
+        // dd($request);
 
-        $products = DB::table('products')
-        ->joinSub($stocks, 'stock', function($join){ //joinSub(サブクエリ,サブクエリのテーブル名,表示する列情報)
-            $join->on('products.id', '=', 'stock.product_id');
-        })
-        ->join('shops', 'products.shop_id', '=', 'shops.id')
-        ->join('secondary_categories', 'products.secondary_category_id', '=', 'secondary_categories.id')
-        ->join('images as image1', 'products.image1', '=', 'image1.id')
-        ->join('images as image2', 'products.image2', '=', 'image2.id')
-        ->join('images as image3', 'products.image3', '=', 'image3.id')
-        ->join('images as image4', 'products.image4', '=', 'image4.id')
-        ->where('shops.is_selling', true)
-        ->where('products.is_selling', true)
-        ->select('products.id as id', 'products.name as name', 'products.price'
-        ,'products.sort_order as sort_order'
-        ,'products.information', 'secondary_categories.name as category'
-        ,'image1.filename as filename')
+        $categories = PrimaryCategory::with('secondary') //EagerLoading
         ->get();
 
-        // dd($stocks, $products);
-        // $products = Product::all();
-
-        return view('user.index', compact('products'));
+        $products = Product::availableItems() //商品一覧の取得 scope
+        ->selectCategory($request->category ?? '0')
+        ->searchKeyword($request->keyword)
+        ->sortOrder($request->sort)
+        ->paginate($request->pagination ?? '20');
+        
+        return view('user.index', 
+        compact('products', 'categories'));
     }
 
     public function show($id)
