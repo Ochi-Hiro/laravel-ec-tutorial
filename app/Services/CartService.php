@@ -20,15 +20,10 @@ class CartService
                 ->select('id', 'name', 'price')->get()->toArray(); //商品情報の配列生成
             $quantity = Cart::where('product_id', $item->product_id)
                 ->select('quantity')->get()->toArray(); //在庫数の配列生成
-            // dd($ownerInfo, $product, $quantity);
-            
             $result = array_merge($product[0], $ownerInfo, $quantity[0]); //配列の結合,productとquantityは配列の中に配列で取得されるので[0]指定する
-            // dd($result);
-
             array_push($products, $result); //用意していたproducts配列にresultを追加する
         }
 
-        dd($products);
         return $products;
     }
 }
