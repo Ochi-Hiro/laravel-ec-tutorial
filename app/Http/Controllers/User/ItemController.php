@@ -32,15 +32,6 @@ class ItemController extends Controller
     
     public function index(Request $request)
     {
-        // dd($request);
-
-        //同期的に送信する
-        // Mail::to('test@example.com')
-        // ->send(new TestMail());
-
-        // 非同期で送信する
-        // SendThanksMail::dispatch();
-
         $categories = PrimaryCategory::with('secondary') //EagerLoading
         ->get();
 
